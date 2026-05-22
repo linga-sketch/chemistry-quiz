@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Who Wants to Be a Millionaire — Chemistry Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,37 +14,26 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      font-family: 'Rajdhani', sans-serif;
+      font-family: Georgia, 'Times New Roman', serif;
     }
 
     #app {
       width: 100%;
       max-width: 820px;
       min-height: 600px;
-      background: radial-gradient(ellipse at center top, #0a1628 0%, #040c1a 60%, #000508 100%);
+      background: #040c1a;
       color: #e8d5a0;
       border-radius: 14px;
       overflow: hidden;
       position: relative;
       box-shadow: 0 0 60px rgba(20, 60, 180, 0.3);
-    }
-
-    .scanlines {
-      position: absolute; inset: 0; pointer-events: none; z-index: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-    }
-
-    .glow-ring {
-      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(30,80,180,0.15) 0%, transparent 70%);
-      pointer-events: none; z-index: 0;
+      border: 1px solid rgba(100,160,230,0.2);
     }
 
     #screen { position: relative; z-index: 1; padding: 16px; }
 
     .gold-bar {
-      position: absolute; left: 0; right: 0; height: 3px;
+      position: absolute; left: 0; right: 0; height: 4px;
       background: linear-gradient(90deg, #7a5800, #f0c040, #c89010, #f0c040, #7a5800);
       z-index: 10;
     }
@@ -53,14 +41,13 @@
     .bot-bar { bottom: 0; }
 
     .title {
-      font-family: 'Cinzel', serif;
-      text-align: center; font-size: 20px; color: #f0c040;
-      letter-spacing: 3px; padding-top: 14px;
-      text-shadow: 0 0 20px rgba(240,192,64,0.4);
+      font-family: Georgia, serif;
+      text-align: center; font-size: 22px; color: #f0c040;
+      letter-spacing: 3px; padding-top: 16px; font-weight: bold;
     }
     .subtitle {
       text-align: center; font-size: 12px; color: #5a7a9a;
-      letter-spacing: 2px; margin-bottom: 4px;
+      letter-spacing: 2px; margin-bottom: 6px; font-family: Arial, sans-serif;
     }
 
     .score-bar {
@@ -68,50 +55,51 @@
       padding: 6px 8px 0; flex-wrap: wrap;
     }
     .dot {
-      width: 8px; height: 8px; border-radius: 50%;
+      width: 9px; height: 9px; border-radius: 50%;
       background: rgba(60,90,140,0.5);
-      border: 0.5px solid rgba(100,150,220,0.3); flex-shrink: 0;
+      border: 1px solid rgba(100,150,220,0.3); flex-shrink: 0;
     }
-    .dot.done-c { background: #30a060; }
-    .dot.done-w { background: #a03030; }
-    .dot.cur-d  { background: #f0c040; box-shadow: 0 0 6px rgba(240,192,64,0.6); }
+    .dot.done-c { background: #30a060; border-color: #30a060; }
+    .dot.done-w { background: #a03030; border-color: #a03030; }
+    .dot.cur-d  { background: #f0c040; border-color: #f0c040; }
 
     .prize-ladder {
-      position: absolute; right: 12px; top: 60px;
+      position: absolute; right: 12px; top: 65px;
       display: flex; flex-direction: column-reverse; gap: 2px;
       z-index: 2; max-height: 480px; overflow: hidden;
     }
     .rung {
-      font-family: 'Rajdhani', sans-serif; font-size: 10px;
+      font-family: Arial, sans-serif; font-size: 10px;
       color: #3a5a7a; padding: 2px 7px; text-align: right;
-      letter-spacing: 1px; border-radius: 3px; transition: all 0.3s;
+      letter-spacing: 1px; border-radius: 3px;
     }
-    .rung.cur  { color: #f0c040; background: rgba(240,192,64,0.12); font-weight: 700; font-size: 11px; }
+    .rung.cur  { color: #f0c040; background: rgba(240,192,64,0.12); font-weight: bold; font-size: 11px; }
     .rung.safe { color: #2a8a50; }
     .rung.done { color: #1a3a28; }
 
     .qbox {
-      background: linear-gradient(180deg, rgba(15,35,80,0.9), rgba(8,18,50,0.95));
+      background: rgba(15,35,80,0.9);
       border: 1px solid rgba(100,160,230,0.4); border-radius: 10px;
-      padding: 16px 20px; margin: 48px 110px 12px 8px;
-      text-align: center; min-height: 90px;
-      display: flex; flex-direction: column; justify-content: center;
+      padding: 18px 20px; margin: 50px 115px 14px 8px;
+      text-align: center; min-height: 100px;
+      display: flex; flex-direction: column; justify-content: center; gap: 8px;
     }
     .qnum {
-      font-family: 'Cinzel', serif; font-size: 10px;
-      color: #f0c040; letter-spacing: 3px; margin-bottom: 6px;
+      font-family: Arial, sans-serif; font-size: 10px;
+      color: #f0c040; letter-spacing: 3px;
     }
     .diff-badge {
       display: inline-block; font-size: 10px; letter-spacing: 1px;
-      padding: 2px 8px; border-radius: 4px; margin-bottom: 6px;
-      font-family: 'Cinzel', serif;
+      padding: 2px 8px; border-radius: 4px;
+      font-family: Arial, sans-serif;
     }
-    .diff-easy   { background: rgba(20,80,40,0.5);  color: #50c878; border: 0.5px solid rgba(50,200,100,0.4); }
-    .diff-medium { background: rgba(80,60,10,0.5);  color: #f0c040; border: 0.5px solid rgba(240,192,64,0.4); }
-    .diff-hard   { background: rgba(80,20,20,0.5);  color: #e06060; border: 0.5px solid rgba(200,60,60,0.4); }
+    .diff-easy   { background: rgba(20,80,40,0.5);  color: #50c878; border: 1px solid rgba(50,200,100,0.4); }
+    .diff-medium { background: rgba(80,60,10,0.5);  color: #f0c040; border: 1px solid rgba(240,192,64,0.4); }
+    .diff-hard   { background: rgba(80,20,20,0.5);  color: #e06060; border: 1px solid rgba(200,60,60,0.4); }
+
     .qtext {
-      font-family: 'Rajdhani', sans-serif; font-size: 17px;
-      font-weight: 600; color: #e8d5a0; line-height: 1.45; white-space: pre-wrap;
+      font-family: Georgia, serif; font-size: 18px;
+      color: #e8d5a0; line-height: 1.5; white-space: pre-wrap;
     }
 
     .grid {
@@ -119,63 +107,59 @@
       gap: 8px; margin: 0 8px 10px;
     }
     .abtn {
-      background: linear-gradient(180deg, rgba(15,35,80,0.85), rgba(8,18,50,0.9));
+      background: rgba(15,35,80,0.85);
       border: 1px solid rgba(100,160,230,0.4); border-radius: 8px;
-      padding: 10px 14px; cursor: pointer;
-      font-family: 'Rajdhani', sans-serif; font-size: 14px;
-      font-weight: 500; color: #c8d8f0;
-      text-align: left; display: flex; align-items: center; gap: 10px;
-      transition: all 0.15s; min-height: 52px;
+      padding: 12px 14px; cursor: pointer;
+      font-family: Arial, sans-serif; font-size: 14px;
+      color: #c8d8f0; text-align: left;
+      display: flex; align-items: center; gap: 10px;
+      min-height: 54px; transition: background 0.15s, border-color 0.15s;
     }
-    .abtn:hover:not(:disabled) {
-      background: linear-gradient(180deg, rgba(40,80,160,0.9), rgba(20,50,120,0.95));
+    .abtn:hover:not([disabled]) {
+      background: rgba(40,80,160,0.9);
       border-color: rgba(200,180,100,0.6); color: #f0d870;
     }
-    .abtn:disabled { cursor: default; }
-    .abtn.sel   { background: linear-gradient(180deg, rgba(140,110,20,0.9), rgba(100,70,10,0.9)); border-color: rgba(240,192,64,0.8); color: #f0c040; }
-    .abtn.corr  { background: linear-gradient(180deg, rgba(20,100,50,0.9),  rgba(10,60,30,0.9));  border-color: rgba(50,200,100,0.8); color: #50c878; }
-    .abtn.wrong { background: linear-gradient(180deg, rgba(100,20,20,0.9),  rgba(60,10,10,0.9));  border-color: rgba(200,60,60,0.8);  color: #e06060; }
-    .aletter { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; color: #f0c040; min-width: 16px; flex-shrink: 0; }
-    .atext   { line-height: 1.3; }
+    .abtn[disabled] { cursor: default; }
+    .abtn.sel   { background: rgba(140,110,20,0.9); border-color: rgba(240,192,64,0.8); color: #f0c040; }
+    .abtn.corr  { background: rgba(20,100,50,0.9);  border-color: rgba(50,200,100,0.8); color: #50c878; }
+    .abtn.wrong { background: rgba(100,20,20,0.9);  border-color: rgba(200,60,60,0.8);  color: #e06060; }
+    .aletter { font-family: Georgia, serif; font-size: 14px; font-weight: bold; color: #f0c040; min-width: 18px; flex-shrink: 0; }
     .fifty-hide { visibility: hidden; }
 
     .lifelines {
-      display: flex; gap: 10px; justify-content: center; padding: 0 8px 8px;
+      display: flex; gap: 10px; justify-content: center; padding: 0 8px 10px;
     }
     .ll {
-      font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1px;
-      padding: 5px 12px; border-radius: 20px;
+      font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 1px;
+      padding: 6px 14px; border-radius: 20px;
       border: 1px solid rgba(240,192,64,0.5);
-      background: rgba(240,192,64,0.08); color: #f0c040; cursor: pointer; transition: all 0.2s;
+      background: rgba(240,192,64,0.08); color: #f0c040; cursor: pointer;
     }
-    .ll:hover:not(:disabled) { background: rgba(240,192,64,0.2); border-color: #f0c040; }
-    .ll:disabled { opacity: 0.25; cursor: default; text-decoration: line-through; }
+    .ll:hover:not([disabled]) { background: rgba(240,192,64,0.2); border-color: #f0c040; }
+    .ll[disabled] { opacity: 0.25; cursor: default; text-decoration: line-through; }
 
     .statusbar {
-      text-align: center; font-family: 'Cinzel', serif;
-      font-size: 13px; letter-spacing: 2px;
-      padding: 4px 16px 8px; min-height: 30px; color: #f0c040;
+      text-align: center; font-family: Georgia, serif;
+      font-size: 14px; letter-spacing: 2px;
+      padding: 4px 16px 8px; min-height: 32px; color: #f0c040;
     }
-    .actions { display: flex; justify-content: center; gap: 10px; padding-bottom: 16px; }
+    .actions { display: flex; justify-content: center; gap: 10px; padding-bottom: 20px; }
 
     .fa-btn {
-      font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px;
-      padding: 9px 24px; border-radius: 8px;
+      font-family: Georgia, serif; font-size: 13px; letter-spacing: 2px;
+      padding: 10px 26px; border-radius: 8px;
       border: 1px solid rgba(240,192,64,0.6);
-      background: linear-gradient(135deg, rgba(180,130,10,0.25), rgba(240,192,64,0.1));
-      color: #f0c040; cursor: pointer; transition: all 0.2s;
+      background: rgba(180,130,10,0.2);
+      color: #f0c040; cursor: pointer;
     }
-    .fa-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, rgba(240,192,64,0.35), rgba(240,192,64,0.15));
-      box-shadow: 0 0 12px rgba(240,192,64,0.25);
-    }
-    .fa-btn:disabled { opacity: 0.35; cursor: default; }
+    .fa-btn:hover:not([disabled]) { background: rgba(240,192,64,0.25); }
+    .fa-btn[disabled] { opacity: 0.35; cursor: default; }
 
     .walk-btn {
-      font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px;
-      padding: 9px 16px; border-radius: 8px;
+      font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 1px;
+      padding: 10px 18px; border-radius: 8px;
       border: 1px solid rgba(100,150,220,0.4);
-      background: transparent; color: #7a9cc0; cursor: pointer; transition: all 0.2s;
+      background: transparent; color: #7a9cc0; cursor: pointer;
     }
     .walk-btn:hover { border-color: #7a9cc0; color: #a0c0e0; }
 
@@ -183,226 +167,202 @@
       .grid { grid-template-columns: 1fr; }
       .prize-ladder { display: none; }
       .qbox { margin-right: 8px; }
-      .title { font-size: 15px; }
+      .title { font-size: 16px; }
     }
   </style>
 </head>
 <body>
-
 <div id="app">
-  <div class="scanlines"></div>
-  <div class="glow-ring"></div>
   <div id="screen"></div>
 </div>
-
 <script>
-const Qs = [
-  {q:"Which particle determines the identity of an element?",         a:["Proton","Neutron","Electron","Photon"],                                              c:0, d:"easy"},
-  {q:"What is the electron configuration of sodium?",                 a:["1s\xB22s\xB22p\u2075","1s\xB22s\xB22p\u2076\u03Bs\xB9","1s\xB22s\xB22p\u2076","1s\xB22s\xB22p\u2076\u03Bp\xB9"],  c:1, d:"easy"},
-  {q:"Which element has the largest atomic radius?",                  a:["Li","Na","K","Rb"],                                                                  c:3, d:"easy"},
-  {q:"Which compound forms between Mg\xB2\u207A and Cl\u207B?",      a:["MgCl","Mg\u2082Cl","MgCl\u2082","Mg\u2082Cl\u2082"],                               c:2, d:"easy"},
-  {q:"What is the atomic number of an element equal to?",            a:["Number of neutrons","Number of protons","Mass number","Number of electrons only"],   c:1, d:"easy"},
-  {q:"Which element is located in Group 18?",                        a:["Sodium","Calcium","Oxygen","Neon"],                                                  c:3, d:"easy"},
-  {q:"Which compound is ionic?",                                     a:["NaCl","H\u2082O","CH\u2084","CO\u2082"],                                            c:0, d:"easy"},
-  {q:"How many moles are in 18 g of H\u2082O?",                      a:["0.5 mol","1 mol","2 mol","18 mol"],                                                  c:1, d:"easy"},
-  {q:"What is the molar mass of CO\u2082?",                          a:["18 g/mol","28 g/mol","44 g/mol","48 g/mol"],                                         c:2, d:"easy"},
-  {q:"Which diagram represents a pure substance?",                   a:["Two different unbonded atoms","Identical molecules throughout","A mixture of atoms and molecules","Two different compounds together"], c:1, d:"easy"},
-  {q:"What is the electron configuration of lithium?",               a:["1s\xB22s\xB9","1s\xB22s\xB2","1s\xB22p\xB9","1s\xB92s\xB2"],                      c:0, d:"easy"},
-  {q:"How many valence electrons does oxygen have?",                 a:["2","4","6","8"],                                                                     c:2, d:"easy"},
-  {q:"Which particle has no charge?",                                a:["Proton","Electron","Neutron","Ion"],                                                 c:2, d:"easy"},
-  {q:"How many atoms are in 2 moles of carbon?",                     a:["6.02 \xD7 10\xB2\xB3","1.20 \xD7 10\xB2\u2074","3.01 \xD7 10\xB2\xB3","12.0 \xD7 10\xB2\xB3"], c:1, d:"medium"},
-  {q:"Which isotope notation is correct for carbon-14?",             a:["\xB9\u2074\u2086C","\u2086\xB9\u2074C","\xB9\u2074\xB9\xB2C","\u2086\u2088C"],     c:0, d:"medium"},
-  {q:"A sample contains two gases evenly mixed together. This is best described as:", a:["A pure element","A pure compound","A homogeneous mixture","A heterogeneous mixture"], c:2, d:"medium"},
-  {q:"Which element has the highest electronegativity?",             a:["Oxygen","Fluorine","Chlorine","Nitrogen"],                                           c:1, d:"medium"},
-  {q:"Which element would have the highest first ionization energy?",a:["Na","Mg","Al","Ar"],                                                                 c:3, d:"medium"},
-  {q:"What is the molar mass of NaCl?",                              a:["35.5 g/mol","58.5 g/mol","23.0 g/mol","46.0 g/mol"],                                c:1, d:"medium"},
-  {q:"Which ion does magnesium form?",                               a:["Mg\u207A","Mg\xB2\u207A","Mg\xB3\u207A","Mg\u207B"],                               c:1, d:"medium"},
-  {q:"The tallest peak on a mass spectrum represents:",              a:["The least abundant isotope","The most abundant isotope","The heaviest isotope","The lightest isotope"], c:1, d:"medium"},
-  {q:"An element has the electron configuration:\n1s\xB2 2s\xB2 2p\u2076 3s\xB2 3p\u2075\nWhat element is it?", a:["Sulfur","Chlorine","Argon","Bromine"],  c:1, d:"hard"},
-  {q:"Which atom has the smallest atomic radius?",                   a:["Na","Mg","Al","Cl"],                                                                 c:3, d:"hard"},
-  {q:"How many grams are in 0.50 mol of O\u2082?",                   a:["8 g","16 g","24 g","32 g"],                                                         c:1, d:"hard"},
-  {q:"In photoelectron spectroscopy, electrons closest to the nucleus have:", a:["Lower binding energy","Higher binding energy","Equal binding energy","No binding energy"], c:1, d:"hard"},
-  {q:"Which formula represents aluminum oxide?",                     a:["AlO","Al\u2082O","Al\u2082O\u2083","Al\u2083O\u2082"],                             c:2, d:"hard"},
-  {q:"A sample contains visible layers of substances. This is classified as:", a:["Pure substance","Homogeneous mixture","Heterogeneous mixture","Ionic compound"], c:2, d:"hard"},
-  {q:"What is the percent composition of oxygen in H\u2082O?",       a:["11%","33%","67%","89%"],                                                            c:3, d:"hard"},
-  {q:"Which element has the greatest number of valence electrons?",  a:["Carbon","Nitrogen","Oxygen","Neon"],                                                 c:3, d:"hard"},
-  {q:"Which of the following species is isoelectronic with Ne?",     a:["Na\u207A","Mg\xB2\u207A","F\u207B","All of the above"],                            c:3, d:"hard"},
-  {q:"FINAL QUESTION\nAn unknown element's PES spectrum shows peaks:\n2e in 1s, 2e in 2s, 5e in 2p.\nWhich element is this?", a:["Carbon","Nitrogen","Oxygen","Fluorine"], c:3, d:"hard"}
+var Qs = [
+  {q:"Which particle determines the identity of an element?",a:["Proton","Neutron","Electron","Photon"],c:0,d:"easy"},
+  {q:"What is the electron configuration of sodium?",a:["1s\u00B22s\u00B22p\u2075","1s\u00B22s\u00B22p\u2076 3s\u00B9","1s\u00B22s\u00B22p\u2076","1s\u00B22s\u00B22p\u2076 3p\u00B9"],c:1,d:"easy"},
+  {q:"Which element has the largest atomic radius?",a:["Li","Na","K","Rb"],c:3,d:"easy"},
+  {q:"Which compound forms between Mg\u00B2\u207A and Cl\u207B?",a:["MgCl","Mg\u2082Cl","MgCl\u2082","Mg\u2082Cl\u2082"],c:2,d:"easy"},
+  {q:"What is the atomic number of an element equal to?",a:["Number of neutrons","Number of protons","Mass number","Number of electrons only"],c:1,d:"easy"},
+  {q:"Which element is located in Group 18?",a:["Sodium","Calcium","Oxygen","Neon"],c:3,d:"easy"},
+  {q:"Which compound is ionic?",a:["NaCl","H\u2082O","CH\u2084","CO\u2082"],c:0,d:"easy"},
+  {q:"How many moles are in 18 g of H\u2082O?",a:["0.5 mol","1 mol","2 mol","18 mol"],c:1,d:"easy"},
+  {q:"What is the molar mass of CO\u2082?",a:["18 g/mol","28 g/mol","44 g/mol","48 g/mol"],c:2,d:"easy"},
+  {q:"Which diagram represents a pure substance?",a:["Two different unbonded atoms","Identical molecules throughout","A mixture of atoms and molecules","Two different compounds together"],c:1,d:"easy"},
+  {q:"What is the electron configuration of lithium?",a:["1s\u00B22s\u00B9","1s\u00B22s\u00B2","1s\u00B22p\u00B9","1s\u00B92s\u00B2"],c:0,d:"easy"},
+  {q:"How many valence electrons does oxygen have?",a:["2","4","6","8"],c:2,d:"easy"},
+  {q:"Which particle has no charge?",a:["Proton","Electron","Neutron","Ion"],c:2,d:"easy"},
+  {q:"How many atoms are in 2 moles of carbon?",a:["6.02 \u00D7 10\u00B2\u00B3","1.20 \u00D7 10\u00B2\u2074","3.01 \u00D7 10\u00B2\u00B3","12.0 \u00D7 10\u00B2\u00B3"],c:1,d:"medium"},
+  {q:"Which isotope notation is correct for carbon-14?",a:["\u00B9\u2074\u2086C","\u2086\u00B9\u2074C","\u00B9\u2074\u00B9\u00B2C","\u2086\u2088C"],c:0,d:"medium"},
+  {q:"A sample contains two gases evenly mixed together. This is best described as:",a:["A pure element","A pure compound","A homogeneous mixture","A heterogeneous mixture"],c:2,d:"medium"},
+  {q:"Which element has the highest electronegativity?",a:["Oxygen","Fluorine","Chlorine","Nitrogen"],c:1,d:"medium"},
+  {q:"Which element would have the highest first ionization energy?",a:["Na","Mg","Al","Ar"],c:3,d:"medium"},
+  {q:"What is the molar mass of NaCl?",a:["35.5 g/mol","58.5 g/mol","23.0 g/mol","46.0 g/mol"],c:1,d:"medium"},
+  {q:"Which ion does magnesium form?",a:["Mg\u207A","Mg\u00B2\u207A","Mg\u00B3\u207A","Mg\u207B"],c:1,d:"medium"},
+  {q:"The tallest peak on a mass spectrum represents:",a:["The least abundant isotope","The most abundant isotope","The heaviest isotope","The lightest isotope"],c:1,d:"medium"},
+  {q:"An element has the electron configuration:\n1s\u00B2 2s\u00B2 2p\u2076 3s\u00B2 3p\u2075\nWhat element is it?",a:["Sulfur","Chlorine","Argon","Bromine"],c:1,d:"hard"},
+  {q:"Which atom has the smallest atomic radius?",a:["Na","Mg","Al","Cl"],c:3,d:"hard"},
+  {q:"How many grams are in 0.50 mol of O\u2082?",a:["8 g","16 g","24 g","32 g"],c:1,d:"hard"},
+  {q:"In photoelectron spectroscopy, electrons closest to the nucleus have:",a:["Lower binding energy","Higher binding energy","Equal binding energy","No binding energy"],c:1,d:"hard"},
+  {q:"Which formula represents aluminum oxide?",a:["AlO","Al\u2082O","Al\u2082O\u2083","Al\u2083O\u2082"],c:2,d:"hard"},
+  {q:"A sample contains visible layers of substances. This is classified as:",a:["Pure substance","Homogeneous mixture","Heterogeneous mixture","Ionic compound"],c:2,d:"hard"},
+  {q:"What is the percent composition of oxygen in H\u2082O?",a:["11%","33%","67%","89%"],c:3,d:"hard"},
+  {q:"Which element has the greatest number of valence electrons?",a:["Carbon","Nitrogen","Oxygen","Neon"],c:3,d:"hard"},
+  {q:"Which of the following species is isoelectronic with Ne?",a:["Na\u207A","Mg\u00B2\u207A","F\u207B","All of the above"],c:3,d:"hard"},
+  {q:"FINAL QUESTION\nAn unknown element's PES spectrum shows peaks:\n2e in 1s, 2e in 2s, 5e in 2p.\nWhich element is this?",a:["Carbon","Nitrogen","Oxygen","Fluorine"],c:3,d:"hard"}
 ];
 
-const PRIZES = [
-  "$100","$200","$300","$500","$1,000","$2,000","$4,000","$8,000","$16,000","$32,000",
-  "$64,000","$125,000","$250,000","$500,000","$1M","$2M","$4M","$8M","$16M","$32M",
-  "$64M","$125M","$250M","$500M","$1M","$2M","$4M","$8M","$16M","$1,000,000"
-];
-const SAFES = [9, 19];
-const L = ["A","B","C","D"];
-const DLABEL = { easy:"Easy", medium:"Medium", hard:"AP Level" };
+var PRIZES=["$100","$200","$300","$500","$1,000","$2,000","$4,000","$8,000","$16,000","$32,000","$64,000","$125,000","$250,000","$500,000","$1M","$2M","$4M","$8M","$16M","$32M","$64M","$125M","$250M","$500M","$1M","$2M","$4M","$8M","$16M","$1,000,000"];
+var SAFES=[9,19];
+var L=["A","B","C","D"];
+var DLABEL={easy:"Easy",medium:"Medium",hard:"AP Level"};
+var gs={i:0,sel:null,rev:false,ll:{f:true,p:true,a:true},fh:null,done:false,walk:false,won:false,hist:[]};
 
-let gs = { i:0, sel:null, rev:false, ll:{f:true,p:true,a:true}, fh:null, done:false, walk:false, won:false, hist:[] };
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function dots() {
-  let h = '<div class="score-bar">';
-  for (let i = 0; i < Qs.length; i++) {
-    let cl = 'dot';
-    if (gs.hist[i] === true)  cl += ' done-c';
-    else if (gs.hist[i] === false) cl = 'dot done-w';
-    else if (i === gs.i && !gs.done && !gs.walk) cl += ' cur-d';
-    h += `<div class="${cl}" title="Q${i+1}"></div>`;
+function dots(){
+  var h='<div class="score-bar">';
+  for(var i=0;i<Qs.length;i++){
+    var cl="dot";
+    if(gs.hist[i]===true) cl+=" done-c";
+    else if(gs.hist[i]===false) cl="dot done-w";
+    else if(i===gs.i&&!gs.done&&!gs.walk) cl+=" cur-d";
+    h+='<div class="'+cl+'" title="Q'+(i+1)+'"></div>';
   }
-  return h + '</div>';
+  return h+"</div>";
 }
 
-function ladder() {
-  let h = '<div class="prize-ladder">';
-  for (let i = Qs.length - 1; i >= 0; i--) {
-    let cl = 'rung';
-    if (i === gs.i) cl += ' cur';
-    else if (i < gs.i) cl += ' done';
-    if (SAFES.includes(i)) cl += ' safe';
-    h += `<div class="${cl}">${PRIZES[i]}</div>`;
+function ladder(){
+  var h='<div class="prize-ladder">';
+  for(var i=Qs.length-1;i>=0;i--){
+    var cl="rung";
+    if(i===gs.i) cl+=" cur";
+    else if(i<gs.i) cl+=" done";
+    if(SAFES.indexOf(i)>-1) cl+=" safe";
+    h+='<div class="'+cl+'">'+PRIZES[i]+"</div>";
   }
-  return h + '</div>';
+  return h+"</div>";
 }
 
-function render() {
-  const el = document.getElementById('screen');
-  if (gs.done || gs.walk) { renderEnd(el); return; }
-
-  const q = Qs[gs.i];
-  let ans = '';
-  q.a.forEach((a, j) => {
-    const hide = gs.fh && gs.fh.includes(j);
-    let cl = 'abtn' + (hide ? ' fifty-hide' : '');
-    if (gs.rev) {
-      if (j === q.c)       cl += ' corr';
-      else if (j === gs.sel) cl += ' wrong';
-    } else if (j === gs.sel) cl += ' sel';
-    ans += `<button class="${cl}" onclick="pick(${j})" ${gs.rev || hide ? 'disabled' : ''}>
-      <span class="aletter">${L[j]}</span><span class="atext">${esc(a)}</span>
-    </button>`;
-  });
-
-  const isCor  = gs.rev && gs.sel === q.c;
-  const isWrong = gs.rev && gs.sel !== null && gs.sel !== q.c;
-  const isLast = gs.i === Qs.length - 1;
-
-  let status = '';
-  if (isCor && !isLast)  status = '🎉 CORRECT!';
-  else if (isCor && isLast) status = '🏆 YOU WIN THE MILLION!';
-  else if (isWrong)      status = '❌ INCORRECT — GAME OVER';
-  else if (gs.sel !== null && !gs.rev) status = 'Is that your final answer?';
-
-  let acts = '';
-  if (!gs.rev) {
-    acts = `<button class="fa-btn" onclick="doFinal()" ${gs.sel === null ? 'disabled' : ''}>FINAL ANSWER</button>
-            <button class="walk-btn" onclick="doWalk()">WALK AWAY</button>`;
-  } else if (isCor && !isLast) {
-    acts = `<button class="fa-btn" onclick="next()">NEXT QUESTION →</button>`;
+function render(){
+  var el=document.getElementById("screen");
+  if(gs.done||gs.walk){renderEnd(el);return;}
+  var q=Qs[gs.i];
+  var ans="";
+  for(var j=0;j<q.a.length;j++){
+    var hide=gs.fh&&gs.fh.indexOf(j)>-1;
+    var cl="abtn"+(hide?" fifty-hide":"");
+    if(gs.rev){if(j===q.c) cl+=" corr"; else if(j===gs.sel) cl+=" wrong";}
+    else if(j===gs.sel) cl+=" sel";
+    var dis=(gs.rev||hide)?"disabled":"";
+    ans+='<button class="'+cl+'" onclick="pick('+j+')" '+dis+'><span class="aletter">'+L[j]+'</span><span>'+esc(q.a[j])+"</span></button>";
+  }
+  var isCor=gs.rev&&gs.sel===q.c;
+  var isWrong=gs.rev&&gs.sel!==null&&gs.sel!==q.c;
+  var isLast=gs.i===Qs.length-1;
+  var status="";
+  if(isCor&&!isLast) status="🎉 CORRECT!";
+  else if(isCor&&isLast) status="🏆 YOU WIN THE MILLION!";
+  else if(isWrong) status="❌ INCORRECT — GAME OVER";
+  else if(gs.sel!==null&&!gs.rev) status="Is that your final answer?";
+  var acts="";
+  if(!gs.rev){
+    acts='<button class="fa-btn" onclick="doFinal()" '+(gs.sel===null?"disabled":"")+'>FINAL ANSWER</button><button class="walk-btn" onclick="doWalk()">WALK AWAY</button>';
+  } else if(isCor&&!isLast){
+    acts='<button class="fa-btn" onclick="next()">NEXT QUESTION &#8594;</button>';
   } else {
-    acts = `<button class="fa-btn" onclick="restart()">PLAY AGAIN</button>`;
+    acts='<button class="fa-btn" onclick="restart()">PLAY AGAIN</button>';
   }
-
-  el.innerHTML = `
-    <div class="gold-bar top-bar"></div>
-    <div class="title">WHO WANTS TO BE A MILLIONAIRE</div>
-    <div class="subtitle">CHEMISTRY EDITION</div>
-    ${dots()}
-    ${ladder()}
-    <div class="qbox">
-      <div class="qnum">QUESTION ${gs.i + 1} OF ${Qs.length}</div>
-      <div><span class="diff-badge diff-${q.d}">${DLABEL[q.d]}</span></div>
-      <div class="qtext">${esc(q.q)}</div>
-    </div>
-    <div class="lifelines">
-      <button class="ll" onclick="ll50()"   ${!gs.ll.f || gs.rev ? 'disabled' : ''}>50:50</button>
-      <button class="ll" onclick="llPhone()" ${!gs.ll.p || gs.rev ? 'disabled' : ''}>📞 PHONE</button>
-      <button class="ll" onclick="llAud()"  ${!gs.ll.a || gs.rev ? 'disabled' : ''}>👥 AUDIENCE</button>
-    </div>
-    <div class="grid">${ans}</div>
-    <div class="statusbar">${status}</div>
-    <div class="actions">${acts}</div>
-    <div class="gold-bar bot-bar"></div>`;
+  el.innerHTML=
+    '<div class="gold-bar top-bar"></div>'+
+    '<div class="title">WHO WANTS TO BE A MILLIONAIRE</div>'+
+    '<div class="subtitle">CHEMISTRY EDITION</div>'+
+    dots()+ladder()+
+    '<div class="qbox">'+
+      '<div class="qnum">QUESTION '+(gs.i+1)+' OF '+Qs.length+'</div>'+
+      '<div><span class="diff-badge diff-'+q.d+'">'+DLABEL[q.d]+'</span></div>'+
+      '<div class="qtext">'+esc(q.q)+'</div>'+
+    '</div>'+
+    '<div class="lifelines">'+
+      '<button class="ll" onclick="ll50()" '+(!gs.ll.f||gs.rev?"disabled":"")+'>50:50</button>'+
+      '<button class="ll" onclick="llPhone()" '+(!gs.ll.p||gs.rev?"disabled":"")+'>Phone a Friend</button>'+
+      '<button class="ll" onclick="llAud()" '+(!gs.ll.a||gs.rev?"disabled":"")+'>Ask the Audience</button>'+
+    '</div>'+
+    '<div class="grid">'+ans+'</div>'+
+    '<div class="statusbar">'+status+'</div>'+
+    '<div class="actions">'+acts+'</div>'+
+    '<div class="gold-bar bot-bar"></div>';
 }
 
-function pick(j)  { if (gs.rev) return; gs.sel = j; render(); }
+function pick(j){if(gs.rev)return;gs.sel=j;render();}
 
-function doFinal() {
-  if (gs.sel === null) return;
-  gs.rev = true;
-  gs.hist[gs.i] = (gs.sel === Qs[gs.i].c);
+function doFinal(){
+  if(gs.sel===null)return;
+  gs.rev=true;
+  gs.hist[gs.i]=(gs.sel===Qs[gs.i].c);
   render();
-  if (gs.sel !== Qs[gs.i].c) {
-    setTimeout(() => { gs.done = true; render(); }, 2200);
-  } else if (gs.i === Qs.length - 1) {
-    setTimeout(() => { gs.done = true; gs.won = true; render(); }, 2200);
-  }
+  if(gs.sel!==Qs[gs.i].c){setTimeout(function(){gs.done=true;render();},2200);}
+  else if(gs.i===Qs.length-1){setTimeout(function(){gs.done=true;gs.won=true;render();},2200);}
 }
 
-function next()    { gs.i++; gs.sel = null; gs.rev = false; gs.fh = null; render(); }
-function doWalk()  { gs.walk = true; render(); }
+function next(){gs.i++;gs.sel=null;gs.rev=false;gs.fh=null;render();}
+function doWalk(){gs.walk=true;render();}
 
-function restart() {
-  gs = { i:0, sel:null, rev:false, ll:{f:true,p:true,a:true}, fh:null, done:false, walk:false, won:false, hist:[] };
+function restart(){
+  gs={i:0,sel:null,rev:false,ll:{f:true,p:true,a:true},fh:null,done:false,walk:false,won:false,hist:[]};
   render();
 }
 
-function ll50() {
-  gs.ll.f = false;
-  const q = Qs[gs.i];
-  const wrong = [0,1,2,3].filter(i => i !== q.c);
-  gs.fh = [wrong[0], wrong[1]];
+function ll50(){
+  gs.ll.f=false;
+  var q=Qs[gs.i];
+  var wrong=[];
+  for(var i=0;i<4;i++){if(i!==q.c)wrong.push(i);}
+  gs.fh=[wrong[0],wrong[1]];
   render();
 }
 
-function llPhone() {
-  gs.ll.p = false;
-  const q = Qs[gs.i];
-  alert(`📞 Your friend says: "I'm pretty sure the answer is ${L[q.c]}... ${q.a[q.c]}!"`);
+function llPhone(){
+  gs.ll.p=false;
+  var q=Qs[gs.i];
+  alert("📞 Your friend says: \"I'm pretty sure the answer is "+L[q.c]+"... "+q.a[q.c]+"!\"");
   render();
 }
 
-function llAud() {
-  gs.ll.a = false;
-  const q = Qs[gs.i];
-  let p = [0,0,0,0];
-  p[q.c] = 55 + Math.floor(Math.random() * 25);
-  const rest = 100 - p[q.c];
-  [0,1,2,3].filter(i => i !== q.c).forEach(i => { p[i] = Math.floor(Math.random() * rest * 0.4); });
-  p[q.c] += 100 - p.reduce((a,b) => a+b, 0);
-  const bars = L.map((l,i) => `${l}: ${'█'.repeat(Math.round(p[i]/5))}${'░'.repeat(20-Math.round(p[i]/5))} ${p[i]}%`).join('\n');
-  alert(`👥 Audience Poll:\n\n${bars}`);
+function llAud(){
+  gs.ll.a=false;
+  var q=Qs[gs.i];
+  var p=[0,0,0,0];
+  p[q.c]=55+Math.floor(Math.random()*25);
+  var rest=100-p[q.c];
+  for(var i=0;i<4;i++){if(i!==q.c)p[i]=Math.floor(Math.random()*rest*0.4);}
+  p[q.c]+=100-p.reduce(function(a,b){return a+b;},0);
+  var bars=L.map(function(l,i){
+    var filled=Math.round(p[i]/5);
+    var empty=20-filled;
+    return l+": "+"█".repeat(filled)+"░".repeat(empty)+" "+p[i]+"%";
+  }).join("\n");
+  alert("👥 Audience Poll:\n\n"+bars);
   render();
 }
 
-function renderEnd(el) {
-  const safe  = SAFES.filter(s => s < gs.i).pop();
-  let prize   = gs.won ? PRIZES[Qs.length - 1]
-              : gs.walk && gs.i > 0 ? PRIZES[gs.i - 1]
-              : safe !== undefined ? PRIZES[safe] : '$0';
-  const msg   = gs.won  ? 'YOU ARE A MILLIONAIRE!'
-              : gs.walk ? `YOU WALKED AWAY WITH ${prize}`
-              : `YOU LEAVE WITH ${prize}`;
-  const sub   = gs.won  ? '🏆 CONGRATULATIONS 🏆'
-              : gs.walk ? 'A WISE DECISION' : 'BETTER LUCK NEXT TIME';
-  const correct = gs.hist.filter(Boolean).length;
-
-  el.innerHTML = `
-    <div class="gold-bar top-bar"></div>
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:500px;padding:32px 20px;text-align:center;gap:16px">
-      <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:#5a7a9a">FINAL RESULT</div>
-      <div style="font-family:'Cinzel',serif;font-size:40px;font-weight:700;color:#f0c040;line-height:1.2">${prize}</div>
-      <div style="font-family:'Cinzel',serif;font-size:15px;letter-spacing:3px;color:#c8d8f0">${msg}</div>
-      <div style="font-size:17px;color:#5a7a9a;letter-spacing:2px">${sub}</div>
-      <div style="font-size:13px;color:#5a7a9a;margin-top:4px">Answered ${correct} of ${Qs.length} correctly</div>
-      ${dots()}
-      <button class="fa-btn" style="margin-top:12px" onclick="restart()">PLAY AGAIN</button>
-    </div>
-    <div class="gold-bar bot-bar"></div>`;
+function renderEnd(el){
+  var safe=null;
+  for(var i=0;i<SAFES.length;i++){if(SAFES[i]<gs.i)safe=SAFES[i];}
+  var prize=gs.won?PRIZES[Qs.length-1]:gs.walk&&gs.i>0?PRIZES[gs.i-1]:safe!==null?PRIZES[safe]:"$0";
+  var msg=gs.won?"YOU ARE A MILLIONAIRE!":gs.walk?"YOU WALKED AWAY WITH "+prize:"YOU LEAVE WITH "+prize;
+  var sub=gs.won?"🏆 CONGRATULATIONS 🏆":gs.walk?"A WISE DECISION":"BETTER LUCK NEXT TIME";
+  var correct=gs.hist.filter(Boolean).length;
+  el.innerHTML=
+    '<div class="gold-bar top-bar"></div>'+
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:500px;padding:32px 20px;text-align:center;gap:18px">'+
+      '<div style="font-family:Arial,sans-serif;font-size:12px;letter-spacing:4px;color:#5a7a9a">FINAL RESULT</div>'+
+      '<div style="font-family:Georgia,serif;font-size:42px;font-weight:bold;color:#f0c040;line-height:1.2">'+prize+'</div>'+
+      '<div style="font-family:Georgia,serif;font-size:16px;letter-spacing:3px;color:#c8d8f0">'+msg+'</div>'+
+      '<div style="font-size:18px;color:#5a7a9a;letter-spacing:2px">'+sub+'</div>'+
+      '<div style="font-size:13px;color:#5a7a9a;margin-top:4px">Answered '+correct+' of '+Qs.length+' correctly</div>'+
+      dots()+
+      '<button class="fa-btn" style="margin-top:12px" onclick="restart()">PLAY AGAIN</button>'+
+    '</div>'+
+    '<div class="gold-bar bot-bar"></div>';
 }
 
 render();
